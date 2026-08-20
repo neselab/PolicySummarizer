@@ -24,3 +24,6 @@ bash experiments/z3_baseline/run.sh \
 `z3_model_enum.py` and `run.sh` are the maintained implementation.
 `legacy/` contains the original workstation-specific scripts and intermediate
 files retained with the experiment record.
+
+The original retained model sets and generated regular expressions are archived
+under [`../../Dataset/Experiment-4-Zelkova/results/`](../../Dataset/Experiment-4-Zelkova/results/).
