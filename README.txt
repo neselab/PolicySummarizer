@@ -28,7 +28,7 @@ Live interface:
 https://policysummarizer.xyz/
 
 Artifact DOI:
-Pending
+https://doi.org/10.5281/zenodo.22022124
 
 
 4. EXPECTED BEHAVIOUR
