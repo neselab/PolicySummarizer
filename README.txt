@@ -7,211 +7,155 @@ Code and Dataset
 2. TARGET BADGE
 ===============
 
-Reviewed (including the prerequisite Available badge)
+Reviewed and Available
 
 
 3. INFO
 =======
 
-Accepted paper:
+Paper:
 Neurosymbolic Characterization for Reliable Access Control Policy Analysis
-
-ISSRE 2026 submission ID:
-The accepted paper title above is the artifact identifier; no paper ID is
-required to run the artifact.
 
 Authors:
 - Adarsh Vatsa, Stevens Institute of Technology, avatsa@stevens.edu
 - Bethel Hall, Stevens Institute of Technology
 - William Eiers, Stevens Institute of Technology, weiers@stevens.edu
 
-Artifact DOI:
-To be reserved on Zenodo and inserted into this file and CITATION.cff before
-the final artifact archive is uploaded.
-
 Source repository:
-https://github.com/fractional-distillation/stunning-spork
+https://github.com/neselab/PolicySummarizer
 
-Optional live demonstration:
+Live interface:
 https://policysummarizer.xyz/
+
+Artifact DOI:
+Pending
 
 
 4. EXPECTED BEHAVIOUR
 =====================
 
-PolicySummarizer characterizes the requests allowed by cloud access-control
-policies. The included Quacky/ABC backend translates a policy to constraints,
-checks satisfiability, counts requests, and extracts formal characterizations.
-The repository also contains the PolicySummarizer experiments, retained result
-files, LLM policy-comprehension experiments, and the user-study materials.
+PolicySummarizer translates cloud access-control policies into logical
+constraints and uses Quacky with ABC to characterize the accepted request
+space. The formal pipeline reports satisfiability, bounded request counts,
+policy differences, accepted resource strings, and an automata-derived resource
+regular expression. The optional LLM stage proposes a shorter expression, which
+is compared with the formal expression before it is recorded.
 
-The Getting Started test is deliberately API-free. It builds the submitted
-Docker image and analyzes a bundled satisfiable AWS IAM policy. A successful
-run reports the policy as satisfiable, prints the logarithm of the permitted
-request count, and ends with:
+The main validation command builds the Docker image, analyzes a bundled AWS IAM
+policy, and recomputes statistics from the retained result files. A successful
+run ends with:
 
-ARTIFACT SMOKE TEST: PASS
+POLICYSUMMARIZER VALIDATION: PASS
 
 
 5. ARTIFACT DESCRIPTION
 =======================
 
-- artifacts/
-  Dockerfile, Quacky source, modified ABC integration, web application, and
-  bundled sample policies used for the functional smoke test.
-- artifact_data/
-  Consolidated copy of the policy inputs, cloud-provider assignments and
-  bindings, retained PolicySummarizer and CPCA outputs, mutation records,
-  historical CSV/JSON/log data, figures, and user-study archive. SHA-256
-  checksums are included in artifact_data/MANIFEST.sha256.
 - policysummarizer/
-  AWS, Azure, and GCP PolicySummarizer implementations, datasets, retained
-  result JSON files, mutation comparison results, and analysis notebook.
-- CPCA/
-  LLM policy-comprehension experiment runner and retained model outputs.
-- Exp-1/, Exp-2/, Exp-3/
-  Supporting policy-generation and regex-summarization experiments.
-- Exp-4-Zelkova/
-  Z3 model-enumeration baseline runner and its focused tests.
+  Runnable system: Dockerfile, Quacky source, ABC integration, batch pipelines,
+  web interface, bundled examples, and technical documentation.
+- experiments/
+  Experiment drivers, protocols, retained outputs, and experiment-specific
+  documentation.
 - Dataset/
-  The 587-policy AWS benchmark input.
-- artifact_evaluation/
-  Reviewer smoke test, API-free retained-result audit, paper/evidence
-  crosswalk, release-hygiene check, and protocol-replication runners.
-- policy_summarizer_user_study.zip
-  Participant-facing user-study site and coded task-answer data for 41 unique
-  participants. The public copy contains no JSONBin credential.
+  Original and mutated AWS policies, PolicySummarizer multi-cloud inputs, and
+  the user-study archive.
+- validation/
+  Docker smoke test, retained-result recomputation, source/metadata checks,
+  result crosswalk, and release archive tooling.
+- CITATION.cff
+  Software and paper citation metadata.
 
-The repository root is licensed under MIT. Source retained from Quacky under
-artifacts/ carries its original BSD-style license in artifacts/LICENSE.
+The repository is licensed under MIT. The bundled Quacky source retains its
+original license in policysummarizer/quacky/LICENSE.
 
 
 6. ENVIRONMENT SETUP
 ====================
 
-Recommended environment:
-- Linux, macOS, or Windows with a working Docker Engine or Docker Desktop
-- Docker Engine 24 or newer
+Recommended host environment:
+- Linux, macOS, or Windows
+- Docker Engine or Docker Desktop 24 or newer
 - 4 CPU cores
 - 8 GB RAM
 - 15 GB free disk space
 - Internet access for the first image build
 
-The smoke test was verified on macOS using Docker/OrbStack. Docker builds an
-Ubuntu 22.04 stage for ABC and a Python 3.12 runtime image, so no host Python,
-ABC, MONA, or LLM API key is needed for the Getting Started test.
+Clone the repository:
 
-There are two distinct execution paths:
+  git clone https://github.com/neselab/PolicySummarizer.git
+  cd PolicySummarizer
 
-- Reviewed-badge functionality and retained-data check: local Docker only; no
-  API key or paid credit is required.
-- Optional fresh LLM experiment runs: require an Anthropic API account,
-  ANTHROPIC_API_KEY, sufficient paid API credit/quota, network access, and
-  access to the model identifier selected for the run. Provider charges are
-  the reviewer's responsibility. The historical model snapshot may no longer
-  be available to new API calls.
+Docker builds pinned ABC, MONA, and Python dependencies. No host Python, ABC,
+MONA, or API key is needed for formal analysis and retained-result validation.
 
-Clone and enter the artifact:
-
-  git clone https://github.com/fractional-distillation/stunning-spork.git
-  cd stunning-spork
+Fresh LLM-backed runs require network access, an Anthropic account,
+ANTHROPIC_API_KEY, available model access, and sufficient API credit and
+rate-limit quota.
 
 
 7. GETTING STARTED
 ==================
 
-Start the interactive reviewer console:
+Run all local checks:
 
-  bash artifact_evaluation/artifact.sh
+  bash validation/check.sh all
 
-Choose option 1 for the complete API-free Reviewed-badge check. The same check
-can be run non-interactively with:
+The first Docker build normally takes 5-15 minutes. The command performs:
+1. A Docker build from policysummarizer/Dockerfile.
+2. Formal analysis of a bundled satisfiable AWS IAM policy.
+3. Recalculation of aggregate statistics from retained experiment records.
+4. A scan for required files, incomplete metadata, and accidental credentials.
 
-  bash artifact_evaluation/artifact.sh review
+Open the interactive console with:
 
-The first Docker build normally takes 5-15 minutes, depending on network and
-CPU speed. A cached build and the sample analysis take under one minute. The
-whole procedure is designed to finish within ISSRE's 30-minute Reviewed-badge
-window.
+  bash validation/check.sh
 
-The check performs these steps:
-1. Build artifacts/Dockerfile, including ABC, MONA, Quacky, and Python code.
-2. Run Quacky inside the container from its required working directory.
-3. Analyze artifacts/samples/iam/exp_single/iam_simplest_policy/policy.json.
-4. Recompute statistics from the retained result files.
-5. Verify every file checksum in artifact_data/.
-6. Scan release metadata and the artifact for unfinished fields or credentials.
+Launch the web interface with:
 
-Expected final line:
+  bash validation/check.sh web
 
-  ISSRE REVIEWER CHECK: PASS
+Then open http://localhost:8000.
 
-Optional web interface:
+Build the broader experiment environment with:
 
-  docker run --rm -p 8000:8000 policysummarizer-ae
+  bash validation/check.sh experiment-image
 
-Then open http://localhost:8000. The interface can be viewed without an API
-key. LLM-backed simplification requests require an Anthropic API key supplied
-at runtime:
+Open a shell in that environment with:
 
-  docker run --rm -e ANTHROPIC_API_KEY=your-key -p 8000:8000 policysummarizer-ae
-
-The public deployment at https://policysummarizer.xyz/ is provided for
-convenience. It is not required for evaluation and is not a substitute for the
-archived Docker image and source.
+  bash validation/check.sh experiment-shell
 
 
 8. REPRODUCIBILITY NOTES
 ========================
 
-Reviewers can audit the released, API-free result files through Docker with:
+Recompute retained measurements:
 
-  bash artifact_evaluation/artifact.sh audit
+  bash validation/check.sh audit
 
-This command verifies dataset sizes, exact-match and mean Jaccard statistics,
-mutation outcome counts, directional mutation statistics, the 41-participant
-study archive, and the retained CPCA records. It runs inside the artifact
-container and makes no network or API calls after the image is built.
+Generate accepted resource samples for one policy without an API key:
 
-The detailed mapping from paper claims to retained evidence is in:
+  bash validation/check.sh sample-check
 
-  artifact_evaluation/RESULTS_CROSSWALK.md
+Inspect the full sample-size workload without making model calls:
 
-The repository also provides an optional fresh run of the paper's five
-PolicySummarizer sample sizes (100, 500, 1,000, 1,500, and 2,000 strings). A
-one-policy, API-free check of sample generation is:
+  bash validation/check.sh sample-sweep --dry-run
 
-  bash artifact_evaluation/artifact.sh sample-check
-
-Before paying for a full run, inspect its size without making API calls:
-
-  bash artifact_evaluation/artifact.sh sample-sweep --dry-run
-
-The full five-size run uses 41 policies and five candidates per condition,
-which means 1,025 initial LLM calls plus any syntax-repair calls. It can take
-many hours and incurs Anthropic API charges. The account must have enough paid
-credit and rate-limit quota for the run. It is therefore not part of the
-30-minute Reviewed-badge procedure. To run it with an available Anthropic
-model:
+Run a fresh LLM-backed sample-size experiment:
 
   export ANTHROPIC_API_KEY="your-key"
-  bash artifact_evaluation/artifact.sh sample-sweep \
+  bash validation/check.sh sample-sweep \
     --model "your-available-model-id" --resume
 
-The runner stores every generated sample set, candidate regex, parser
-diagnostic, selected candidate, token count, model identifier, elapsed time,
-and aggregate score under replication_runs/. Because LLM responses are
-stochastic and provider model snapshots can change, a fresh paid run validates
-the released experimental procedure but is not expected to reproduce prior
-responses byte for byte.
+Run the Z3 + LLM baseline:
 
-The Z3+LLM baseline runner likewise records every enumerated model, candidate,
-repair, selected regex, API metadata, and score. It is exposed through:
-
-  bash artifact_evaluation/artifact.sh z3-baseline \
+  export ANTHROPIC_API_KEY="your-key"
+  bash validation/check.sh z3-baseline \
     --model "your-available-model-id" --resume
 
-This is also a paid Anthropic workflow and requires ANTHROPIC_API_KEY,
-sufficient API credit/quota, network access, and model access. These optional
-fresh runs are separate from the API-free functionality and retained-data
-checks used for the requested badges.
+Fresh LLM runs store model identifiers, candidates, parser diagnostics, token
+usage, elapsed time, and aggregate scores under run_outputs/. Model responses
+are stochastic and depend on the model version available to the account.
+
+The mapping from reported measurements to retained files and recomputation code
+is in validation/RESULTS_CROSSWALK.md.

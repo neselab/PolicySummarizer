@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-message: "If you use this artifact, please cite the associated ISSRE 2026 paper."
-title: "PolicySummarizer Artifact"
+message: "If you use this software, please cite the associated ISSRE 2026 paper."
+title: "PolicySummarizer"
 type: software
 authors:
   - family-names: Vatsa
@@ -14,7 +14,7 @@ authors:
     given-names: William
     email: weiers@stevens.edu
     affiliation: Stevens Institute of Technology
-repository-code: "https://github.com/fractional-distillation/stunning-spork"
+repository-code: "https://github.com/neselab/PolicySummarizer"
 license: MIT
 version: 1.0.0
 date-released: 2026-08-18
