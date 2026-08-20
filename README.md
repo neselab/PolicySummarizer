@@ -37,7 +37,7 @@ formal characterization.
 | --- | --- |
 | [`policysummarizer/`](policysummarizer/) | Runnable system, Quacky/ABC integration, web interface, Docker image, samples, and technical documentation |
 | [`experiments/`](experiments/) | Experiment drivers, protocols, retained outputs, and per-experiment documentation |
-| [`Dataset/`](Dataset/) | AWS policy corpus, mutations, multi-cloud inputs, and user-study materials |
+| [`Dataset/`](Dataset/) | AWS policy corpus, mutations, multi-cloud inputs, Experiment 4 Z3 baseline outputs, and user-study materials |
 | [`validation/`](validation/) | Docker smoke test, retained-result recomputation, metadata checks, and archive tooling |
 | [`README.txt`](README.txt) | ISSRE artifact metadata and the compact execution procedure |
 

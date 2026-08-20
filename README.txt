@@ -59,7 +59,7 @@ POLICYSUMMARIZER VALIDATION: PASS
   documentation.
 - Dataset/
   Original and mutated AWS policies, PolicySummarizer multi-cloud inputs, and
-  the user-study archive.
+  the Experiment 4 Z3 baseline outputs and user-study archive.
 - validation/
   Docker smoke test, retained-result recomputation, source/metadata checks,
   result crosswalk, and release archive tooling.
